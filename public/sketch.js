@@ -8,7 +8,7 @@ let currentIndex = 0; // 当前显示的图片索引
 
 function preload() {
   message = loadStrings('txt/message.txt');
-  img = loadImage('txt/img.jpg');
+  img = loadImage('txt/img1.jpg');
 
   for (let i = 0; i <= 4; i++) { // 假设有5张图片
     images.push(loadImage(`txt/img${i}.jpg`));
@@ -29,13 +29,25 @@ function setup() {
 
     // 创建滑块，设置范围和初始位置
     slider = createSlider(0, images.length - 1, 0);
-    slider.position(10, height - 20); // 设置滑块的位置
+    slider.position(width*0.5, height - 100); // 设置滑块的位置
+
+    img.loadPixels();
+  EXIF.getData(img, () => {
+    console.log(EXIF.pretty());
+  });
+
+  const orientation = EXIF.getTag(img, 'Orientation');
+
+  print(orientation);
 }
 
 function draw() {
+  
   img = images[currentIndex];
   imgRatio = img.width / img.height; // 计算图片的宽高比
 
+
+  
   // 使用窗口的宽度来计算图片的显示尺寸
   let displayWidth = windowWidth * 0.8; // 图片最大占屏幕宽度的80%
   let displayHeight = displayWidth / imgRatio; // 根据宽高比计算高度
@@ -54,7 +66,6 @@ function draw() {
 
   // 根据滑块的位置显示对应的图片
   // image(images[currentIndex], 0, 0, width, height);
-  print(slider.value() + images.length);
   currentIndex = int(slider.value());
 }
 
